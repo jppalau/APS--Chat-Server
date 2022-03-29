@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketOption;
 import java.util.Arrays;
 
 /**
@@ -20,16 +21,17 @@ public class ClientSocket {
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
+    private String nome;
     
-    public ClientSocket(final Socket socket) throws IOException {
+    public ClientSocket(final Socket socket, String nome) throws IOException {
         this.socket = socket;
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
+        this.nome = nome;
     }
     
     public boolean sendMsg(String msg) {
         out.println(msg);
-        
         //retorna true se não houve nenhum erro ao enviar mensagem ou false caso tenha havido
         return !out.checkError();
     }
@@ -54,6 +56,13 @@ public class ClientSocket {
     
     public SocketAddress getAddress(){
         return socket.getRemoteSocketAddress();
+    }
+
+    /**
+     * @return the nome
+     */
+    public String getNome() {
+        return nome;
     }
 
     /*public boolean isOpen(){

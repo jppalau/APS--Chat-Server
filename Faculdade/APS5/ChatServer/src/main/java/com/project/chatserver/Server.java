@@ -20,8 +20,6 @@ public class Server {
     
     private ServerSocket serverSocket;
     
-    public String name;
-    
     private final List<ClientSocket> clientSocketList;
     
     
@@ -38,7 +36,7 @@ public class Server {
         serverSocket = new ServerSocket(PORT);
         System.out.println(
                 "Servidor de chat bloqueante iniciado no endereço " + serverSocket.getInetAddress().getHostAddress() +
-                " e porta " + PORT);
+                " e porta " + PORT + "nome: ");
 
         clientConnectionLoop();
     }
@@ -50,8 +48,8 @@ public class Server {
                 
                 ClientSocket clientSocket;
                 try {
-                    clientSocket = new ClientSocket(serverSocket.accept());
-                    System.out.println("Cliente " + clientSocket.getAddress() + " conectado");
+                    clientSocket = new ClientSocket(serverSocket.accept(), Chat.nome);
+                    System.out.println("Cliente " +  clientSocket.getAddress() + " conectado");
                 }catch(SocketException e){
                     System.err.println("Erro ao aceitar conexão do cliente. O servidor possivelmente está sobrecarregado:");
                     System.err.println(e.getMessage());
@@ -84,7 +82,7 @@ public class Server {
         try {
             String msg;
             while((msg = clientSocket.getMessage()) != null){
-                System.out.println("Mensagem recebida do cliente "+ clientSocket.getAddress() +": " + msg);
+                System.out.println("Mensagem recebida do cliente "+ clientSocket.getNome() +  clientSocket.getAddress() +": " + msg);
 
                 if("sair".equalsIgnoreCase(msg)){
                     return;
@@ -104,7 +102,7 @@ public class Server {
         while (iterator.hasNext()) {
             final ClientSocket client = iterator.next();
             
-            if (!client.equals(sender)) {
+            if (client.getNome().equals("lucas")) {
                 client.sendMsg(msg);
                 count++;
                //iterator.remove();

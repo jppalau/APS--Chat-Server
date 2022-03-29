@@ -15,9 +15,10 @@ import java.util.Scanner;
  */
 public class Chat implements Runnable{
     public static final String SERVER_ADDRESS = "127.0.0.1";
-    private final Scanner scr;
+    
     private ClientSocket clientSocket;
     public String msg;
+    public static String nome = "lucas";
     
     
     public static void main(String[] args) {
@@ -29,13 +30,13 @@ public class Chat implements Runnable{
         }     
     }
     
-    public Chat(){
+    /*public Chat(){
         scr = new Scanner(System.in);
-    }
+    }*/
     
     public void start() throws IOException{
         final Socket socket = new Socket(SERVER_ADDRESS, Server.PORT);
-        clientSocket = new ClientSocket(socket);
+        clientSocket = new ClientSocket(socket, nome);
         System.out.println("Cliente conectado ao servidor no endereço " + SERVER_ADDRESS + " e porta " + Server.PORT);
         System.out.println("Digite uma msg (ou 'sair' para encerrar): ");
         
@@ -49,15 +50,16 @@ public class Chat implements Runnable{
     @Override
     public void run() {
         while((msg = clientSocket.getMessage())!= null) {
-            System.out.println(msg);
+            System.out.println(nome +": " + msg);
         }
     }
     
     public void messageLoop(){
-        do {            
+        do {     
+            Scanner scr = new Scanner(System.in);
             msg = scr.nextLine();
             clientSocket.sendMsg(msg);
-        } while (!"sair".equalsIgnoreCase(scr.nextLine()));
+        } while (!"sair".equalsIgnoreCase(msg));
             clientSocket.close();
 
     }
