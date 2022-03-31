@@ -18,7 +18,7 @@ public class Chat implements Runnable{
     
     private ClientSocket clientSocket;
     public String msg;
-    public static String nome = "lucas";
+    public static String nome = "joao";
     
     
     public static void main(String[] args) {
@@ -50,7 +50,7 @@ public class Chat implements Runnable{
     @Override
     public void run() {
         while((msg = clientSocket.getMessage())!= null) {
-            System.out.println(nome +": " + msg);
+            System.out.println(msg);
         }
     }
     

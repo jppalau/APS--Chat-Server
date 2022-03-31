@@ -49,7 +49,7 @@ public class Server {
                 ClientSocket clientSocket;
                 try {
                     clientSocket = new ClientSocket(serverSocket.accept(), Chat.nome);
-                    System.out.println("Cliente " +  clientSocket.getAddress() + " conectado");
+                    System.out.println("Cliente " +  clientSocket.getAddress() + " conectado | nome: " + clientSocket.getNome() );
                 }catch(SocketException e){
                     System.err.println("Erro ao aceitar conexão do cliente. O servidor possivelmente está sobrecarregado:");
                     System.err.println(e.getMessage());
@@ -103,7 +103,7 @@ public class Server {
             final ClientSocket client = iterator.next();
             
             if (client.getNome().equals("lucas")) {
-                client.sendMsg(msg);
+                client.sendMsg(sender.getAddress() + " | " + sender.getNome() + ": " + msg);
                 count++;
                //iterator.remove();
             }

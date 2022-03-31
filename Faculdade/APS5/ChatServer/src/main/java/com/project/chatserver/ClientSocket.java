@@ -21,7 +21,7 @@ public class ClientSocket {
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
-    private String nome;
+    private final String nome;
     
     public ClientSocket(final Socket socket, String nome) throws IOException {
         this.socket = socket;
