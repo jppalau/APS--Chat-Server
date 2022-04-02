@@ -18,7 +18,7 @@ public class Chat implements Runnable{
     
     private ClientSocket clientSocket;
     public String msg;
-    public static String nome = "joao";
+    public static String nome = "vleber";
     
     
     public static void main(String[] args) {
