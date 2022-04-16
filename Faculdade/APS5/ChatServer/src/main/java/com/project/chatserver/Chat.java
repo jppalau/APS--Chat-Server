@@ -15,11 +15,11 @@ import java.util.Scanner;
  */
 public class Chat implements Runnable {
 
-    public static final String SERVER_ADDRESS = "127.0.0.1";
+    public static final String SERVER_ADDRESS = "127.0.0.1"; 
 
     private ClientSocket clientSocket;
     public String msg;
-    public static String nome = "Jorge";
+    public static String nome = "Jorge";  // nome do usuario
 
     public static void main(String[] args) {
         try {
@@ -33,7 +33,7 @@ public class Chat implements Runnable {
     /*public Chat(){
         scr = new Scanner(System.in);
     }*/
-    public void start() throws IOException {
+    public void start() throws IOException { // interface do usuario no terminal
         final Socket socket = new Socket(SERVER_ADDRESS, Server.PORT);
         clientSocket = new ClientSocket(socket, nome);
         System.out.println("Cliente conectado ao servidor no endereço " + SERVER_ADDRESS + " e porta " + Server.PORT);
@@ -53,7 +53,7 @@ public class Chat implements Runnable {
         }
     }
 
-    public void messageLoop() {
+    public void messageLoop() { // funcao para ler a mensagem e enviar mensagem
         do {
             Scanner scr = new Scanner(System.in);
             msg = scr.nextLine();

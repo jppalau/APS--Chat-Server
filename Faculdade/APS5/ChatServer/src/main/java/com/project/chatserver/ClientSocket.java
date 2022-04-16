@@ -30,13 +30,13 @@ public class ClientSocket {
         this.nome = nome;
     }
     
-    public boolean sendMsg(String msg) {
+    public boolean sendMsg(String msg) { //retorna true se não houve nenhum erro ao enviar mensagem ou false caso tenha havido
         out.println(msg);
-        //retorna true se não houve nenhum erro ao enviar mensagem ou false caso tenha havido
+       
         return !out.checkError();
     }
     
-    public String getMessage() {
+    public String getMessage() {  // recebe a mensagem do outro usuario
         try {
             return in.readLine();
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class ClientSocket {
         }
     }
     
-    public void close(){
+    public void close(){  // fecha o socket?
         try {
             in.close();
             out.close();
