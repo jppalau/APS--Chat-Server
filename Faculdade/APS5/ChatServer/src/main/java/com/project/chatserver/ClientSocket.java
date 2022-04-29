@@ -28,13 +28,13 @@ public class ClientSocket {
         this.out = new PrintWriter(socket.getOutputStream(), true);
     }
     
-    public boolean sendMsg(String msg) { //retorna true se não houve nenhum erro ao enviar mensagem ou false caso tenha havido
+    public boolean sendMsg(String msg) {
         out.println(msg);
-       
+        //retorna true se não houve nenhum erro ao enviar mensagem ou false caso tenha havido
         return !out.checkError();
     }
     
-    public String getMessage() {  // recebe a mensagem do outro usuario
+    public String getMessage() {
         try {
             return in.readLine();
         } catch (IOException e) {
@@ -42,7 +42,7 @@ public class ClientSocket {
         }
     }
     
-    public void close(){  // fecha o socket?
+    public void close(){
         try {
             in.close();
             out.close();
