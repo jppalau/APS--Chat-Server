@@ -6,9 +6,11 @@ package com.project.chatserver;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +23,8 @@ public class Server {
     private ServerSocket serverSocket;
     
     private final List<ClientSocket> clientSocketList;
-    
+    ArrayList  arrayName = new ArrayList<String>();  
+    ArrayList<Integer> arrayCountName = new ArrayList<Integer>();
     
     public Server() {
         clientSocketList = new LinkedList<>();
@@ -36,7 +39,7 @@ public class Server {
         serverSocket = new ServerSocket(PORT);
         System.out.println(
                 "Servidor de chat bloqueante iniciado no endereço " + serverSocket.getInetAddress().getHostAddress() +
-                " e porta " + PORT + "nome: ");
+                " e porta " + PORT);
 
         clientConnectionLoop();
     }
@@ -48,8 +51,8 @@ public class Server {
                 
                 ClientSocket clientSocket;
                 try {
-                    clientSocket = new ClientSocket(serverSocket.accept(), Chat.nome);
-                    System.out.println("Cliente " +  clientSocket.getAddress() + " conectado | nome: " + clientSocket.getNome() );
+                    clientSocket = new ClientSocket(serverSocket.accept());
+                    System.out.println("Cliente " +  clientSocket.getAddress() + " conectado");
                 }catch(SocketException e){
                     System.err.println("Erro ao aceitar conexão do cliente. O servidor possivelmente está sobrecarregado:");
                     System.err.println(e.getMessage());
@@ -62,12 +65,13 @@ public class Server {
                 try {
                     new Thread(() -> clientMessageLoop(clientSocket)).start();
                     clientSocketList.add(clientSocket);
-                    
+                    arrayCountName.add(0);
                 }catch(OutOfMemoryError ex){
                     System.err.println(
                             "Não foi possível criar thread para novo cliente. O servidor possivelmente está sobrecarregdo. Conexão será fechada: ");
                     System.err.println(ex.getMessage());
                     clientSocket.close();
+
                 }
             }
         } finally{
@@ -81,14 +85,31 @@ public class Server {
     private void clientMessageLoop(final ClientSocket clientSocket){
         try {
             String msg;
-            while((msg = clientSocket.getMessage()) != null){
-                System.out.println("Mensagem recebida do cliente "+ clientSocket.getNome() +  clientSocket.getAddress() +": " + msg);
+            while((msg = clientSocket.getMessage()) != null){           
+                try {
+                    for (int i = 0; 0 < clientSocketList.size(); i++) {
+                        if (clientSocketList.get(i) == clientSocket) {
+                            if (arrayCountName.get(i) == 0) {
+                                System.out.println("esse é o index " + i);
+                                arrayName.add(i, msg);
+                                System.out.println("nome: " + msg);
+                                arrayCountName.set(i, 1);
+                            }else{
+                                System.out.println("Mensagem recebida do cliente " + arrayCountName.get(i) + " | " +  clientSocket.getAddress() +": " + msg);
+                                sendMsgToAll(clientSocket, msg);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                }
+                //System.out.println(clientSocketList.indexOf(clientSocket.getAddress())); 
+                //System.out.println(arrayName.get(0));
+                //System.out.println("Mensagem recebida do cliente " +  clientSocket.getAddress() +": " + msg);
 
                 if("sair".equalsIgnoreCase(msg)){
                     return;
                 }
-
-                sendMsgToAll(clientSocket, msg);
+                
             }
         } finally {
             clientSocket.close();
@@ -98,12 +119,14 @@ public class Server {
     private void sendMsgToAll(final ClientSocket sender, final String msg) {
         final Iterator<ClientSocket> iterator = clientSocketList.iterator();
         int count = 0;
-       
+        int getIndex = arrayName.indexOf("joao");
+        int getIndex2 = clientSocketList.indexOf(sender);
         while (iterator.hasNext()) {
             final ClientSocket client = iterator.next();
             
-            if (client.getNome().equals("lucas")) {
-                client.sendMsg(sender.getAddress() + " | " + sender.getNome() + ": " + msg);
+            if (client.equals(clientSocketList.get(getIndex))) {
+                
+                client.sendMsg(sender.getAddress() + " | " + arrayName.get(clientSocketList.indexOf(sender)) + ": " + msg); 
                 count++;
                //iterator.remove();
             }

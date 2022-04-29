@@ -21,13 +21,11 @@ public class ClientSocket {
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
-    private final String nome;
     
-    public ClientSocket(final Socket socket, String nome) throws IOException {
+    public ClientSocket(final Socket socket) throws IOException {
         this.socket = socket;
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
-        this.nome = nome;
     }
     
     public boolean sendMsg(String msg) {
@@ -61,9 +59,6 @@ public class ClientSocket {
     /**
      * @return the nome
      */
-    public String getNome() {
-        return nome;
-    }
 
     /*public boolean isOpen(){
         return !socket.isClosed();

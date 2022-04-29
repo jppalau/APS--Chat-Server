@@ -7,6 +7,7 @@ package com.project.chatserver;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketImpl;
 import java.util.Scanner;
 
 /**
@@ -18,8 +19,7 @@ public class Chat implements Runnable{
     
     private ClientSocket clientSocket;
     public String msg;
-    public static String nome = "joao";
-    
+    public int firstWriting = 0;
     
     public static void main(String[] args) {
         try {
@@ -33,12 +33,11 @@ public class Chat implements Runnable{
     /*public Chat(){
         scr = new Scanner(System.in);
     }*/
-    
+ 
     public void start() throws IOException{
         final Socket socket = new Socket(SERVER_ADDRESS, Server.PORT);
-        clientSocket = new ClientSocket(socket, nome);
+        clientSocket = new ClientSocket(socket);       
         System.out.println("Cliente conectado ao servidor no endereço " + SERVER_ADDRESS + " e porta " + Server.PORT);
-        System.out.println("Digite uma msg (ou 'sair' para encerrar): ");
         
         Thread thread = new Thread(this);
         thread.start();
@@ -55,7 +54,14 @@ public class Chat implements Runnable{
     }
     
     public void messageLoop(){
-        do {     
+        do {    
+            if (firstWriting == 0) {
+                System.out.println("Insira seu nome: ");
+                firstWriting ++;
+            }else if(firstWriting == 1){
+                System.out.println("Digite uma msg (ou 'sair' para encerrar): ");
+                firstWriting ++;
+            }
             Scanner scr = new Scanner(System.in);
             msg = scr.nextLine();
             clientSocket.sendMsg(msg);
