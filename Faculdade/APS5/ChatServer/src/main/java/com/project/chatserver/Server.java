@@ -35,7 +35,7 @@ public class Server {
         server.start();
     }
     
-    private void start() throws IOException {
+    private void start() throws IOException {  // comeca o socket do servidor
         serverSocket = new ServerSocket(PORT);
         System.out.println(
                 "Servidor de chat bloqueante iniciado no endereço " + serverSocket.getInetAddress().getHostAddress() +
@@ -44,7 +44,7 @@ public class Server {
         clientConnectionLoop();
     }
 
-    private void clientConnectionLoop() throws IOException {
+    private void clientConnectionLoop() throws IOException { // checa se o cliente se conectou com o servidor
         try {
             while (true) {
                 System.out.println("Aguardando conexão de novo cliente");
@@ -82,7 +82,7 @@ public class Server {
         
     }
     
-    private void clientMessageLoop(final ClientSocket clientSocket){
+    private void clientMessageLoop(final ClientSocket clientSocket){  // checa se o usuario enviou uma mensagem e envia para o usuario
         try {
             String msg;
             while((msg = clientSocket.getMessage()) != null){           
@@ -116,7 +116,7 @@ public class Server {
         }
     }
     
-    private void sendMsgToAll(final ClientSocket sender, final String msg) {
+    private void sendMsgToAll(final ClientSocket sender, final String msg) {  // manda mensagem para todos os clientes
         final Iterator<ClientSocket> iterator = clientSocketList.iterator();
         int count = 0;
         int getIndex = arrayName.indexOf("joao");
@@ -134,7 +134,7 @@ public class Server {
         System.out.println("Mensagem encaminhada para " + count + " clientes");
     }
     
-    public void stop(){
+    public void stop(){ // fecha o servidor
         try {
             System.out.println("Finalizando o servidor");
             serverSocket.close();

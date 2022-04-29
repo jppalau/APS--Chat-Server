@@ -14,41 +14,42 @@ import java.util.Scanner;
  *
  * @author ZF676VA
  */
-public class Chat implements Runnable{
-    public static final String SERVER_ADDRESS = "127.0.0.1";
-    
+public class Chat implements Runnable {
+
+    public static final String SERVER_ADDRESS = "127.0.0.1"; 
+
     private ClientSocket clientSocket;
     public String msg;
     public int firstWriting = 0;
-    
+
     public static void main(String[] args) {
         try {
             Chat chat = new Chat();
             chat.start();
         } catch (IOException e) {
             System.out.println("Erro ao conectar ao servidor: " + e.getMessage());
-        }     
+        }
     }
-    
+
     /*public Chat(){
         scr = new Scanner(System.in);
     }*/
- 
-    public void start() throws IOException{
+
+    public void start() throws IOException { // interface do usuario no terminal
         final Socket socket = new Socket(SERVER_ADDRESS, Server.PORT);
         clientSocket = new ClientSocket(socket);       
         System.out.println("Cliente conectado ao servidor no endereço " + SERVER_ADDRESS + " e porta " + Server.PORT);
-        
+
         Thread thread = new Thread(this);
         thread.start();
-        
+
         messageLoop();
-        
+
     }
-    
+
     @Override
     public void run() {
-        while((msg = clientSocket.getMessage())!= null) {
+        while ((msg = clientSocket.getMessage()) != null) {
             System.out.println(msg);
         }
     }
@@ -62,14 +63,13 @@ public class Chat implements Runnable{
                 System.out.println("Digite uma msg (ou 'sair' para encerrar): ");
                 firstWriting ++;
             }
+
             Scanner scr = new Scanner(System.in);
             msg = scr.nextLine();
             clientSocket.sendMsg(msg);
         } while (!"sair".equalsIgnoreCase(msg));
-            clientSocket.close();
+        clientSocket.close();
 
     }
-    
-    
-    
+
 }
