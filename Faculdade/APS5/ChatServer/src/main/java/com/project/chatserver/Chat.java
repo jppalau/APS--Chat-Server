@@ -55,14 +55,18 @@ public class Chat implements Runnable {
     }
     
     public void messageLoop(){
-        do {    
-            if (firstWriting == 0) {
-                System.out.println("Insira seu nome: ");
-                firstWriting ++;
-            }else if(firstWriting == 1){
-                System.out.println("Digite uma msg (ou 'sair' para encerrar): ");
-                firstWriting ++;
-            }
+        do {   
+            switch(firstWriting)
+            {
+                case 0: //escolha do nome
+                    System.out.println("Insira seu nome: ");
+                    firstWriting ++;
+                    break;
+                case 1: //informacao para o usuario
+                    System.out.println("Digite um nome e depois insira sua mensagem (ou 'sair' para encerrar): ");
+                    firstWriting ++;
+                    break;       
+            } 
 
             Scanner scr = new Scanner(System.in);
             msg = scr.nextLine();

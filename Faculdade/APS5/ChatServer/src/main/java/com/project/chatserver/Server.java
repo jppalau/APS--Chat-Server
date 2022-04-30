@@ -23,7 +23,7 @@ public class Server {
     private ServerSocket serverSocket;
     
     private final List<ClientSocket> clientSocketList;
-    ArrayList  arrayName = new ArrayList<String>();  
+    ArrayList<String>  arrayName = new ArrayList<String>();  //lista de nome de clientes
     ArrayList<Integer> arrayCountName = new ArrayList<Integer>();
     
     public Server() {
@@ -53,6 +53,7 @@ public class Server {
                 try {
                     clientSocket = new ClientSocket(serverSocket.accept());
                     System.out.println("Cliente " +  clientSocket.getAddress() + " conectado");
+                    System.out.println();
                 }catch(SocketException e){
                     System.err.println("Erro ao aceitar conexão do cliente. O servidor possivelmente está sobrecarregado:");
                     System.err.println(e.getMessage());
@@ -85,6 +86,8 @@ public class Server {
     private void clientMessageLoop(final ClientSocket clientSocket){  // checa se o usuario enviou uma mensagem e envia para o usuario
         try {
             String msg;
+            boolean nomeAchado = false;
+            int index = 0;
             while((msg = clientSocket.getMessage()) != null){           
                 try {
                     for (int i = 0; 0 < clientSocketList.size(); i++) {
@@ -95,8 +98,27 @@ public class Server {
                                 System.out.println("nome: " + msg);
                                 arrayCountName.set(i, 1);
                             }else{
-                                System.out.println("Mensagem recebida do cliente " + arrayCountName.get(i) + " | " +  clientSocket.getAddress() +": " + msg);
-                                sendMsgToAll(clientSocket, msg);
+                                if(!nomeAchado && !nomeRecebido(msg))
+                                {
+                                    clientSocket.sendMsg("cliente nao achado");
+                                }
+                                if(nomeAchado) //envia a mensagem e pede nome novamente
+                                {
+                                    sendMsgToAll(clientSocket, msg, index);
+                                    clientSocket.sendMsg("mensagem enviada com sucesso");
+                                    System.out.println();
+                                    nomeAchado = false;
+                                    index = 0;
+                                }
+                                if(nomeRecebido(msg)) // identifica o nome
+                                {
+                                    nomeAchado = true;
+                                    index = nomeIndex(msg);
+                                    clientSocket.sendMsg("usuario achado envie uma mensagem");
+                                }
+                               
+                                System.out.println("Mensagem recebida do cliente " + arrayCountName.get(nomeIndex(msg)) + " | " +  clientSocket.getAddress() +": " + msg);
+                                
                             }
                         }
                     }
@@ -116,11 +138,10 @@ public class Server {
         }
     }
     
-    private void sendMsgToAll(final ClientSocket sender, final String msg) {  // manda mensagem para todos os clientes
+    private void sendMsgToAll(final ClientSocket sender, final String msg,int getIndex) {  // manda mensagem para todos os clientes
         final Iterator<ClientSocket> iterator = clientSocketList.iterator();
         int count = 0;
-        int getIndex = arrayName.indexOf("joao");
-        int getIndex2 = clientSocketList.indexOf(sender);
+
         while (iterator.hasNext()) {
             final ClientSocket client = iterator.next();
             
@@ -131,7 +152,7 @@ public class Server {
                //iterator.remove();
             }
         }
-        System.out.println("Mensagem encaminhada para " + count + " clientes");
+        System.out.println("Mensagem foi enviada para " + count + " clientes");
     }
     
     public void stop(){ // fecha o servidor
@@ -142,4 +163,33 @@ public class Server {
             
         }        
     }
+
+    private boolean nomeRecebido(String msg) //confere se o nome recebido existe
+    {
+        for(String i: arrayName)
+        {
+            if(msg.equals(i))
+            {
+                System.out.println("nome achado "+ i);
+                return true;
+            }
+            
+        }  
+        return false;
+    }
+    private int nomeIndex(String msg) // acha a posicao do nome no arraylist
+    {
+        int n1 = 0;
+        
+        for(int i = 0; i < arrayName.size(); i++)
+        if(msg.equals(arrayName.get(i)))
+        {
+            System.out.println("index achado "+ i);
+            n1 = i;
+          
+        }
+           
+        return n1;
+    }
+      
 }
