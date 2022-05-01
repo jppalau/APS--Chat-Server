@@ -106,8 +106,12 @@ public class Server {
                                 {
                                     nomeAchado = false;
                                     index = 0;
+                                    System.out.println("voce terminou a conversa com esse usuario");
+                                    System.out.println();
+                                    clientSocket.sendMsg("voce parou de conversar com esse usuario");
                                 }
-                                if(nomeAchado) //envia a mensagem e pede nome novamente
+                                if(nomeAchado) //envia a mensagem a usuario achado
+
                                 {
                                     sendMsgToAll(clientSocket, msg, index);
                                     clientSocket.sendMsg("mensagem enviada com sucesso");
