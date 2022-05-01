@@ -102,13 +102,18 @@ public class Server {
                                 {
                                     clientSocket.sendMsg("cliente nao achado");
                                 }
+                                if(msg.equalsIgnoreCase("mudar"))
+                                {
+                                    nomeAchado = false;
+                                    index = 0;
+                                }
                                 if(nomeAchado) //envia a mensagem e pede nome novamente
                                 {
                                     sendMsgToAll(clientSocket, msg, index);
                                     clientSocket.sendMsg("mensagem enviada com sucesso");
                                     System.out.println();
-                                    nomeAchado = false;
-                                    index = 0;
+                                    //nomeAchado = false;
+                                    //index = 0;
                                 }
                                 if(nomeRecebido(msg)) // identifica o nome
                                 {

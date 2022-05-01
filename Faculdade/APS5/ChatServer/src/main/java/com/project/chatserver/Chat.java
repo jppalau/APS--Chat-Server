@@ -63,7 +63,7 @@ public class Chat implements Runnable {
                     firstWriting ++;
                     break;
                 case 1: //informacao para o usuario
-                    System.out.println("Digite um nome e depois insira sua mensagem (ou 'sair' para encerrar): ");
+                    System.out.println("Digite um nome e depois insira sua mensagem (ou 'mudar' para conversar com outro usuario ou 'sair' para encerrar): ");
                     firstWriting ++;
                     break;       
             } 
